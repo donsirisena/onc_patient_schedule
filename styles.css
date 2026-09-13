@@ -221,7 +221,7 @@ table {
 
     border-collapse: collapse;
 
-    table-layout: auto;
+    table-layout: fixed;
 }
 
 
@@ -247,6 +247,28 @@ th {
     white-space: nowrap;
 }
 
+.resizable-column {
+    position: sticky;
+    top: 0;
+}
+
+.resize-handle {
+    position: absolute;
+
+    top: 0;
+    right: 0;
+
+    width: 6px;
+    height: 100%;
+
+    cursor: col-resize;
+
+    user-select: none;
+}
+
+.resize-handle:hover {
+    background-color: rgba(47, 117, 181, 0.18);
+}
 
 td {
     padding: 10px 12px;
