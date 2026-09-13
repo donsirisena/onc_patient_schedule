@@ -187,166 +187,110 @@ body {
 }
 
 
-/* =========================================================
-   MAIN SCHEDULE AREA
-   ========================================================= */
-
 .schedule-container {
     flex: 1;
     min-height: 0;
-
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    padding-right: 5px;
+    overflow: hidden;
 }
 
 
-/* =========================================================
-   CYCLE CARD
-   ========================================================= */
-
-.cycle-card {
+.table-card {
     background-color: #ffffff;
 
     border: 1px solid #d2dbe4;
     border-radius: 6px;
 
-    margin-bottom: 14px;
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.09);
+
+    height: 100%;
 
     overflow: hidden;
-
-    box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 
-.cycle-header {
+.table-scroll {
+    height: 100%;
+    overflow: auto;
+}
+
+
+table {
+    width: 100%;
+    min-width: 1250px;
+
+    border-collapse: collapse;
+
+    table-layout: auto;
+}
+
+
+th {
     background-color: #dce6f1;
+
+    color: #263f56;
 
     border-bottom: 1px solid #b8c5d1;
 
-    padding: 11px 14px;
-}
+    padding: 10px 12px;
 
+    text-align: left;
 
-.cycle-label {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: bold;
 
-    color: #607486;
+    position: sticky;
+    top: 0;
 
-    text-transform: uppercase;
+    z-index: 10;
 
-    margin-bottom: 3px;
+    white-space: nowrap;
 }
 
 
-.cycle-name {
-    font-size: 15px;
-    font-weight: 600;
+td {
+    padding: 10px 12px;
 
-    color: #263f56;
-}
+    border-bottom: 1px solid #e2e7ec;
 
-
-/* =========================================================
-   DAY SECTION
-   ========================================================= */
-
-.day-section {
-    border-bottom: 1px solid #e0e5ea;
-}
-
-
-.day-section:last-child {
-    border-bottom: none;
-}
-
-
-.day-header {
-    display: flex;
-
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 9px 14px;
-
-    background-color: #f7f9fb;
-}
-
-
-.day-name {
-    font-size: 13px;
-    font-weight: bold;
-
-    color: #1f5f99;
-}
-
-
-.day-date {
     font-size: 12px;
 
-    color: #667784;
+    vertical-align: middle;
 }
 
 
-/* =========================================================
-   APPOINTMENT ROW
-   ========================================================= */
-
-.appointment-row {
-    display: grid;
-
-    grid-template-columns:
-        110px
-        minmax(230px, 1.5fr)
-        minmax(180px, 1fr)
-        90px
-        100px;
-
-    align-items: center;
-
-    column-gap: 14px;
-
-    padding: 11px 14px;
-
-    border-top: 1px solid #edf0f3;
+tbody tr:hover {
+    background-color: #f5f9fc;
 }
 
 
-.appointment-row:hover {
-    background-color: #f8fbfd;
+.appointment-date {
+    white-space: nowrap;
+    font-weight: 600;
 }
 
 
 .appointment-time {
-    font-size: 13px;
+    white-space: nowrap;
     font-weight: 600;
-
-    color: #263238;
 }
 
 
 .appointment-type {
-    font-size: 13px;
     font-weight: 600;
-
-    color: #263238;
 }
 
 
-.appointment-resource {
-    font-size: 12px;
-
-    color: #596873;
+.cycle-cell {
+    min-width: 260px;
 }
 
 
-.appointment-duration {
-    font-size: 12px;
+.dot-cell {
+    min-width: 80px;
 
-    color: #596873;
+    color: #1f5f99;
+    font-weight: 600;
 }
 
 
@@ -373,52 +317,6 @@ body {
 .status-badge.cancelled,
 .status-badge.canceled {
     background-color: #f5e5e5;
+
     color: #9b4444;
-}
-
-
-/* =========================================================
-   PRETREATMENT
-   ========================================================= */
-
-.pretreatment .day-name {
-    color: #7a5b26;
-}
-
-
-/* =========================================================
-   EMPTY MESSAGE
-   ========================================================= */
-
-.empty-message {
-    background-color: white;
-
-    border: 1px solid #d2dbe4;
-    border-radius: 6px;
-
-    padding: 30px;
-
-    text-align: center;
-
-    color: #667784;
-
-    font-size: 14px;
-}
-
-
-/* =========================================================
-   SMALLER SCREENS
-   ========================================================= */
-
-@media (max-width: 1000px) {
-
-    .appointment-row {
-        grid-template-columns:
-            90px
-            minmax(190px, 1fr)
-            minmax(150px, 1fr)
-            70px
-            90px;
-    }
-
 }
