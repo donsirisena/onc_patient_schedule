@@ -37,20 +37,44 @@
     <!-- MAIN PAGE -->
     <div class="container">
 
-        <!-- TOOLBAR -->
+    <!-- TOOLBAR -->
         <div class="toolbar">
 
-            <div class="toolbar-title">
-                Upcoming Schedule
-            </div>
+       <div class="toolbar-title">
+        Patient Schedule
+       </div>
+
+        <div class="toolbar-actions">
+
+        <div class="view-toggle">
 
             <button
-                id="refreshButton"
-                class="primary-button"
+                id="futureButton"
+                class="view-button active"
                 type="button"
             >
-                Refresh
+                Future Appointments
             </button>
+
+            <button
+                id="completedButton"
+                class="view-button"
+                type="button"
+            >
+                Completed Appointments
+            </button>
+
+        </div>
+
+        <button
+            id="refreshButton"
+            class="primary-button"
+            type="button"
+        >
+            Refresh
+        </button>
+
+        </div>
 
         </div>
 
