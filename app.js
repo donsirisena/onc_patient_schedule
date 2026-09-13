@@ -15,11 +15,6 @@ const refreshButton =
     document.getElementById("refreshButton");
 
 
-
-/* =========================================================
-   INITIAL LOAD
-   ========================================================= */
-
 document.addEventListener(
     "DOMContentLoaded",
     function () {
@@ -28,11 +23,6 @@ document.addEventListener(
 );
 
 
-
-/* =========================================================
-   REFRESH BUTTON
-   ========================================================= */
-
 refreshButton.addEventListener(
     "click",
     function () {
@@ -40,11 +30,6 @@ refreshButton.addEventListener(
     }
 );
 
-
-
-/* =========================================================
-   LOAD SCHEDULE FROM CCL
-   ========================================================= */
 
 function loadSchedule() {
 
@@ -68,16 +53,12 @@ function loadSchedule() {
         request.onreadystatechange =
             function () {
 
-                if (
-                    request.readyState === 4
-                ) {
+                if (request.readyState === 4) {
 
                     refreshButton.disabled = false;
 
 
-                    if (
-                        request.status === 200
-                    ) {
+                    if (request.status === 200) {
 
                         processScheduleResponse(
                             request.responseText
@@ -126,11 +107,6 @@ function loadSchedule() {
 
 }
 
-
-
-/* =========================================================
-   PROCESS CCL RESPONSE
-   ========================================================= */
 
 function processScheduleResponse(
     responseText
@@ -208,21 +184,12 @@ function processScheduleResponse(
 }
 
 
-
-/* =========================================================
-   RENDER SCHEDULE
-   ========================================================= */
-
 function renderSchedule(
     appointments
 ) {
 
     scheduleContainer.innerHTML = "";
 
-
-    /*
-        Sort appointments chronologically.
-    */
 
     const sortedAppointments =
         [...appointments].sort(
@@ -247,349 +214,54 @@ function renderSchedule(
         );
 
 
-    /*
-        Group by cycle.
-    */
-
-    const cycleGroups =
-        groupAppointmentsByCycle(
-            sortedAppointments
-        );
-
-
-    Object.keys(
-        cycleGroups
-    ).forEach(
-        function (cycleName) {
-
-            const cycleCard =
-                createCycleCard(
-                    cycleName,
-                    cycleGroups[
-                        cycleName
-                    ]
-                );
-
-
-            scheduleContainer.appendChild(
-                cycleCard
-            );
-
-        }
-    );
-
-}
-
-
-
-/* =========================================================
-   GROUP APPOINTMENTS BY CYCLE
-   ========================================================= */
-
-function groupAppointmentsByCycle(
-    appointments
-) {
-
-    const groups = {};
-
-
-    appointments.forEach(
-        function (appointment) {
-
-            const cycleName =
-                appointment.cycleName
-                ||
-                appointment.regimen
-                ||
-                "Other Appointments";
-
-
-            if (
-                !groups[
-                    cycleName
-                ]
-            ) {
-
-                groups[
-                    cycleName
-                ] = [];
-
-            }
-
-
-            groups[
-                cycleName
-            ].push(
-                appointment
-            );
-
-        }
-    );
-
-
-    return groups;
-
-}
-
-
-
-/* =========================================================
-   CREATE CYCLE CARD
-   ========================================================= */
-
-function createCycleCard(
-    cycleName,
-    appointments
-) {
-
-    const card =
+    const tableCard =
         document.createElement(
             "div"
         );
 
+    tableCard.className =
+        "table-card";
 
-    card.className =
-        "cycle-card";
 
-
-    /*
-        Cycle header
-    */
-
-    const header =
+    const tableScroll =
         document.createElement(
             "div"
         );
 
+    tableScroll.className =
+        "table-scroll";
 
-    header.className =
-        "cycle-header";
 
-
-    const label =
+    const table =
         document.createElement(
-            "div"
+            "table"
         );
 
 
-    label.className =
-        "cycle-label";
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Appointment Type</th>
+                <th>Duration</th>
+                <th>Resource</th>
+                <th>Cycle</th>
+                <th>DOT</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    `;
 
-    label.textContent =
-        "Treatment Cycle";
 
-
-    const name =
-        document.createElement(
-            "div"
+    const tableBody =
+        table.querySelector(
+            "tbody"
         );
 
 
-    name.className =
-        "cycle-name";
-
-    name.textContent =
-        cycleName;
-
-
-    header.appendChild(
-        label
-    );
-
-    header.appendChild(
-        name
-    );
-
-
-    card.appendChild(
-        header
-    );
-
-
-    /*
-        Group this cycle by
-        Day of Treatment.
-    */
-
-    const dayGroups =
-        groupAppointmentsByDay(
-            appointments
-        );
-
-
-    Object.keys(
-        dayGroups
-    ).forEach(
-        function (dayName) {
-
-            const daySection =
-                createDaySection(
-                    dayName,
-                    dayGroups[
-                        dayName
-                    ]
-                );
-
-
-            card.appendChild(
-                daySection
-            );
-
-        }
-    );
-
-
-    return card;
-
-}
-
-
-
-/* =========================================================
-   GROUP BY DAY OF TREATMENT
-   ========================================================= */
-
-function groupAppointmentsByDay(
-    appointments
-) {
-
-    const groups = {};
-
-
-    appointments.forEach(
-        function (appointment) {
-
-            const day =
-                appointment
-                    .dayOfTreatment
-                ||
-                "Other";
-
-
-            if (
-                !groups[
-                    day
-                ]
-            ) {
-
-                groups[
-                    day
-                ] = [];
-
-            }
-
-
-            groups[
-                day
-            ].push(
-                appointment
-            );
-
-        }
-    );
-
-
-    return groups;
-
-}
-
-
-
-/* =========================================================
-   CREATE DAY SECTION
-   ========================================================= */
-
-function createDaySection(
-    dayName,
-    appointments
-) {
-
-    const section =
-        document.createElement(
-            "div"
-        );
-
-
-    section.className =
-        "day-section";
-
-
-    if (
-        dayName
-            .toLowerCase()
-            .includes(
-                "day 0"
-            )
-    ) {
-
-        section.classList.add(
-            "pretreatment"
-        );
-
-    }
-
-
-    /*
-        Day header
-    */
-
-    const header =
-        document.createElement(
-            "div"
-        );
-
-
-    header.className =
-        "day-header";
-
-
-    const name =
-        document.createElement(
-            "div"
-        );
-
-
-    name.className =
-        "day-name";
-
-    name.textContent =
-        dayName;
-
-
-    const date =
-        document.createElement(
-            "div"
-        );
-
-
-    date.className =
-        "day-date";
-
-    date.textContent =
-        getDayDateText(
-            appointments
-        );
-
-
-    header.appendChild(
-        name
-    );
-
-    header.appendChild(
-        date
-    );
-
-
-    section.appendChild(
-        header
-    );
-
-
-    /*
-        Appointment rows
-    */
-
-    appointments.forEach(
+    sortedAppointments.forEach(
         function (appointment) {
 
             const row =
@@ -598,7 +270,7 @@ function createDaySection(
                 );
 
 
-            section.appendChild(
+            tableBody.appendChild(
                 row
             );
 
@@ -606,15 +278,20 @@ function createDaySection(
     );
 
 
-    return section;
+    tableScroll.appendChild(
+        table
+    );
+
+    tableCard.appendChild(
+        tableScroll
+    );
+
+    scheduleContainer.appendChild(
+        tableCard
+    );
 
 }
 
-
-
-/* =========================================================
-   CREATE APPOINTMENT ROW
-   ========================================================= */
 
 function createAppointmentRow(
     appointment
@@ -622,17 +299,9 @@ function createAppointmentRow(
 
     const row =
         document.createElement(
-            "div"
+            "tr"
         );
 
-
-    row.className =
-        "appointment-row";
-
-
-    /*
-        Time / Date
-    */
 
     const dateTime =
         parseCernerDate(
@@ -641,123 +310,11 @@ function createAppointmentRow(
         );
 
 
-    const time =
-        document.createElement(
-            "div"
-        );
-
-
-    time.className =
-        "appointment-time";
-
-
-    time.textContent =
-        formatAppointmentTime(
-            dateTime
-        );
-
-
-    /*
-        Appointment type
-    */
-
-    const type =
-        document.createElement(
-            "div"
-        );
-
-
-    type.className =
-        "appointment-type";
-
-    type.textContent =
-        appointment
-            .appointmentType
-        ||
-        "";
-
-
-    /*
-        Resource
-    */
-
-    const resource =
-        document.createElement(
-            "div"
-        );
-
-
-    resource.className =
-        "appointment-resource";
-
-    resource.textContent =
-        appointment.resource
-        ||
-        "";
-
-
-    /*
-        Duration
-    */
-
-    const duration =
-        document.createElement(
-            "div"
-        );
-
-
-    duration.className =
-        "appointment-duration";
-
-
-    if (
-        appointment.duration
-    ) {
-
-        duration.textContent =
-            appointment.duration +
-            " min";
-
-    }
-    else {
-
-        duration.textContent =
-            "";
-
-    }
-
-
-    /*
-        Schedule state badge
-    */
-
-    const statusContainer =
-        document.createElement(
-            "div"
-        );
-
-
-    const badge =
-        document.createElement(
-            "span"
-        );
-
-
-    badge.className =
-        "status-badge";
-
-
     const scheduleState =
-        appointment.scheduleState
-        ||
-        "";
+        appointment.scheduleState || "";
 
 
-    badge.textContent =
-        scheduleState;
-
-
-    const stateClass =
+    const badgeClass =
         scheduleState
             .toLowerCase()
             .replace(
@@ -766,41 +323,55 @@ function createAppointmentRow(
             );
 
 
-    if (
-        stateClass
-    ) {
+    row.innerHTML = `
+        <td class="appointment-date">
+            ${formatCalendarDate(dateTime)}
+        </td>
 
-        badge.classList.add(
-            stateClass
-        );
+        <td class="appointment-time">
+            ${formatAppointmentTime(dateTime)}
+        </td>
 
-    }
+        <td class="appointment-type">
+            ${escapeHtml(
+                appointment.appointmentType || ""
+            )}
+        </td>
 
+        <td>
+            ${
+                appointment.duration
+                    ? appointment.duration + " min"
+                    : ""
+            }
+        </td>
 
-    statusContainer.appendChild(
-        badge
-    );
+        <td>
+            ${escapeHtml(
+                appointment.resource || ""
+            )}
+        </td>
 
+        <td class="cycle-cell">
+            ${escapeHtml(
+                appointment.cycleName ||
+                appointment.regimen ||
+                ""
+            )}
+        </td>
 
-    row.appendChild(
-        time
-    );
+        <td class="dot-cell">
+            ${escapeHtml(
+                appointment.dayOfTreatment || ""
+            )}
+        </td>
 
-    row.appendChild(
-        type
-    );
-
-    row.appendChild(
-        resource
-    );
-
-    row.appendChild(
-        duration
-    );
-
-    row.appendChild(
-        statusContainer
-    );
+        <td>
+            <span class="status-badge ${badgeClass}">
+                ${escapeHtml(scheduleState)}
+            </span>
+        </td>
+    `;
 
 
     return row;
@@ -808,106 +379,11 @@ function createAppointmentRow(
 }
 
 
-
-/* =========================================================
-   DAY DATE LABEL
-   ========================================================= */
-
-function getDayDateText(
-    appointments
-) {
-
-    if (
-        appointments.length === 0
-    ) {
-
-        return "";
-
-    }
-
-
-    const dates =
-        appointments.map(
-            function (appointment) {
-
-                return parseCernerDate(
-                    appointment
-                        .appointmentDateTime
-                );
-
-            }
-        );
-
-
-    dates.sort(
-        function (
-            dateA,
-            dateB
-        ) {
-
-            return (
-                dateA -
-                dateB
-            );
-
-        }
-    );
-
-
-    const firstDate =
-        dates[0];
-
-
-    const lastDate =
-        dates[
-            dates.length - 1
-        ];
-
-
-    if (
-        isSameCalendarDay(
-            firstDate,
-            lastDate
-        )
-    ) {
-
-        return formatCalendarDate(
-            firstDate
-        );
-
-    }
-
-
-    return (
-        formatCalendarDate(
-            firstDate
-        )
-        +
-        " – "
-        +
-        formatCalendarDate(
-            lastDate
-        )
-    );
-
-}
-
-
-
-/* =========================================================
-   PARSE CCL DATE
-
-   Example:
-   2026-SEP-13 08:55
-   ========================================================= */
-
 function parseCernerDate(
     dateString
 ) {
 
-    if (
-        !dateString
-    ) {
+    if (!dateString) {
 
         return new Date();
 
@@ -917,24 +393,19 @@ function parseCernerDate(
     const parts =
         dateString
             .trim()
-            .split(
-                " "
-            );
+            .split(" ");
 
 
     const datePart =
         parts[0];
 
+
     const timePart =
-        parts[1]
-        ||
-        "00:00";
+        parts[1] || "00:00";
 
 
     const datePieces =
-        datePart.split(
-            "-"
-        );
+        datePart.split("-");
 
 
     const year =
@@ -971,9 +442,7 @@ function parseCernerDate(
 
 
     const timePieces =
-        timePart.split(
-            ":"
-        );
+        timePart.split(":");
 
 
     const hour =
@@ -990,9 +459,7 @@ function parseCernerDate(
 
     return new Date(
         year,
-        months[
-            monthText
-        ],
+        months[monthText],
         day,
         hour,
         minute
@@ -1000,11 +467,6 @@ function parseCernerDate(
 
 }
 
-
-
-/* =========================================================
-   FORMAT DATE
-   ========================================================= */
 
 function formatCalendarDate(
     date
@@ -1022,11 +484,6 @@ function formatCalendarDate(
 }
 
 
-
-/* =========================================================
-   FORMAT TIME
-   ========================================================= */
-
 function formatAppointmentTime(
     date
 ) {
@@ -1042,41 +499,22 @@ function formatAppointmentTime(
 }
 
 
-
-/* =========================================================
-   COMPARE DAYS
-   ========================================================= */
-
-function isSameCalendarDay(
-    dateA,
-    dateB
+function escapeHtml(
+    value
 ) {
 
-    return (
-        dateA.getFullYear()
-        ===
-        dateB.getFullYear()
+    const div =
+        document.createElement(
+            "div"
+        );
 
-        &&
+    div.textContent =
+        value;
 
-        dateA.getMonth()
-        ===
-        dateB.getMonth()
-
-        &&
-
-        dateA.getDate()
-        ===
-        dateB.getDate()
-    );
+    return div.innerHTML;
 
 }
 
-
-
-/* =========================================================
-   STATUS HELPERS
-   ========================================================= */
 
 function showLoadingStatus(
     message
@@ -1089,7 +527,6 @@ function showLoadingStatus(
         message;
 
 }
-
 
 
 function showSuccessStatus(
@@ -1105,7 +542,6 @@ function showSuccessStatus(
 }
 
 
-
 function showErrorStatus(
     message
 ) {
@@ -1118,11 +554,6 @@ function showErrorStatus(
 
 }
 
-
-
-/* =========================================================
-   EMPTY SCHEDULE
-   ========================================================= */
 
 function showEmptySchedule() {
 
