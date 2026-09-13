@@ -310,20 +310,50 @@ function renderSchedule(
 
 
     table.innerHTML = `
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Appointment Type</th>
-                <th>Duration</th>
-                <th>Resource</th>
-                <th>Cycle</th>
-                <th>DOT</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    `;
+    <thead>
+        <tr>
+            <th class="resizable-column">
+                Date
+                <span class="resize-handle"></span>
+            </th>
+
+            <th class="resizable-column">
+                Time
+                <span class="resize-handle"></span>
+            </th>
+
+            <th class="resizable-column">
+                Appointment Type
+                <span class="resize-handle"></span>
+            </th>
+
+            <th class="resizable-column">
+                Duration
+                <span class="resize-handle"></span>
+            </th>
+
+            <th class="resizable-column">
+                Resource
+                <span class="resize-handle"></span>
+            </th>
+
+            <th class="resizable-column">
+                Cycle
+                <span class="resize-handle"></span>
+            </th>
+
+            <th class="resizable-column">
+                DOT
+                <span class="resize-handle"></span>
+            </th>
+
+            <th>
+                Status
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+`;
 
 
     const tableBody =
@@ -359,6 +389,10 @@ function renderSchedule(
 
     scheduleContainer.appendChild(
         tableCard
+    );
+
+    enableColumnResizing(
+    table
     );
 
 }
@@ -654,5 +688,111 @@ function showEmptySchedule() {
         );
 
     }
+
+}
+
+function enableColumnResizing(
+    table
+) {
+
+    const headers =
+        table.querySelectorAll(
+            "th.resizable-column"
+        );
+
+
+    headers.forEach(
+        function (header) {
+
+            const handle =
+                header.querySelector(
+                    ".resize-handle"
+                );
+
+
+            if (!handle) {
+                return;
+            }
+
+
+            let startX = 0;
+            let startWidth = 0;
+
+
+            handle.addEventListener(
+                "mousedown",
+                function (event) {
+
+                    event.preventDefault();
+
+
+                    startX =
+                        event.clientX;
+
+
+                    startWidth =
+                        header.offsetWidth;
+
+
+                    document.addEventListener(
+                        "mousemove",
+                        resizeColumn
+                    );
+
+
+                    document.addEventListener(
+                        "mouseup",
+                        stopResizing
+                    );
+
+                }
+            );
+
+
+            function resizeColumn(
+                event
+            ) {
+
+                const newWidth =
+                    startWidth +
+                    (
+                        event.clientX -
+                        startX
+                    );
+
+
+                if (newWidth >= 60) {
+
+                    header.style.width =
+                        newWidth + "px";
+
+                    header.style.minWidth =
+                        newWidth + "px";
+
+                    header.style.maxWidth =
+                        newWidth + "px";
+
+                }
+
+            }
+
+
+            function stopResizing() {
+
+                document.removeEventListener(
+                    "mousemove",
+                    resizeColumn
+                );
+
+
+                document.removeEventListener(
+                    "mouseup",
+                    stopResizing
+                );
+
+            }
+
+        }
+    );
 
 }
