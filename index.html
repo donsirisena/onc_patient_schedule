@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        http-equiv="Content-Type"
+        content="XMLCCLREQUEST,APPLINK,MPAGES_EVENT"
+        name="discern"
+    >
+
+    <title>Oncology Patient Schedule</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <div class="page-header">
+
+        <img
+            src="logo.png"
+            alt="Organization logo"
+            class="page-logo"
+        >
+
+        <div>
+            <h1>Oncology Patient Schedule</h1>
+            <p>Upcoming Treatment Appointments</p>
+        </div>
+
+    </div>
+
+
+    <!-- MAIN PAGE -->
+    <div class="container">
+
+        <!-- TOOLBAR -->
+        <div class="toolbar">
+
+            <div class="toolbar-title">
+                Upcoming Schedule
+            </div>
+
+            <button
+                id="refreshButton"
+                class="primary-button"
+                type="button"
+            >
+                Refresh
+            </button>
+
+        </div>
+
+
+        <!-- STATUS -->
+        <div
+            id="statusMessage"
+            class="status"
+        >
+            Loading upcoming appointments...
+        </div>
+
+
+        <!-- SCHEDULE -->
+        <div
+            id="scheduleContainer"
+            class="schedule-container"
+        >
+        </div>
+
+
+        <!-- EMPTY STATE -->
+        <div
+            id="emptyMessage"
+            class="empty-message"
+            style="display:none;"
+        >
+            No upcoming oncology appointments were found.
+        </div>
+
+    </div>
+
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>
