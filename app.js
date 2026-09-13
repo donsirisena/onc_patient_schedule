@@ -14,6 +14,62 @@ const emptyMessage =
 const refreshButton =
     document.getElementById("refreshButton");
 
+const futureButton =
+    document.getElementById("futureButton");
+
+const completedButton =
+    document.getElementById("completedButton");
+
+
+let currentView = "future";
+
+futureButton.addEventListener(
+    "click",
+    function () {
+
+        currentView = "future";
+
+        updateViewButtons();
+
+        loadSchedule();
+
+    }
+);
+
+
+completedButton.addEventListener(
+    "click",
+    function () {
+
+        currentView = "completed";
+
+        updateViewButtons();
+
+        loadSchedule();
+
+    }
+);
+
+function updateViewButtons() {
+
+    if (currentView === "future") {
+
+        futureButton.classList.add("active");
+
+        completedButton.classList.remove("active");
+
+    }
+    else {
+
+        completedButton.classList.add("active");
+
+        futureButton.classList.remove("active");
+
+    }
+
+}
+
+
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -85,9 +141,16 @@ function loadSchedule() {
         );
 
 
+    const viewMode =
+        currentView === "future"
+        ? 1
+        : 2;
+
+
         request.send(
-            "^MINE^"
-        );
+        "^MINE^," +
+        viewMode
+    );
 
     }
     catch (error) {
@@ -150,16 +213,24 @@ function processScheduleResponse(
         );
 
 
-        showSuccessStatus(
-            appointments.length +
-            " upcoming appointment" +
-            (
-                appointments.length === 1
-                    ? ""
-                    : "s"
-            ) +
-            " found."
-        );
+const viewText =
+    currentView === "future"
+        ? "future"
+        : "completed";
+
+
+showSuccessStatus(
+    appointments.length +
+    " " +
+    viewText +
+    " appointment" +
+    (
+        appointments.length === 1
+            ? ""
+            : "s"
+    ) +
+    " found."
+);
 
     }
     catch (error) {
@@ -557,15 +628,31 @@ function showErrorStatus(
 
 function showEmptySchedule() {
 
-    scheduleContainer.innerHTML =
-        "";
+    scheduleContainer.innerHTML = "";
 
     emptyMessage.style.display =
         "block";
 
 
-    showSuccessStatus(
-        "No upcoming oncology appointments found."
-    );
+    if (currentView === "future") {
+
+        emptyMessage.textContent =
+            "No future oncology appointments were found.";
+
+        showSuccessStatus(
+            "No future oncology appointments found."
+        );
+
+    }
+    else {
+
+        emptyMessage.textContent =
+            "No completed oncology appointments were found.";
+
+        showSuccessStatus(
+            "No completed oncology appointments found."
+        );
+
+    }
 
 }
