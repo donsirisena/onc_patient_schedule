@@ -147,10 +147,10 @@ function loadSchedule() {
         : 2;
 
 
-        request.send(
-        "^MINE^," +
-        viewMode
-    );
+       request.send(
+    "^MINE^,$PAT_PersonId$,$VIS_EncntrId$," +
+    viewMode
+        );
 
     }
     catch (error) {
