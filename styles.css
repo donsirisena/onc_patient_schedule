@@ -58,7 +58,7 @@ body {
 .page-header h1 {
     margin: 0;
 
-    font-size: 20px;
+    font-size: 25px;
     font-weight: 600;
 }
 
@@ -394,4 +394,23 @@ tbody tr:hover {
     background-color: #2f75b5;
 
     color: white;
+}
+
+.appointment-type-link {
+    border: none;
+    background: none;
+    padding: 0;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+
+    color: #1f5f99;
+
+    cursor: pointer;
+    text-align: left;
+}
+
+.appointment-type-link:hover {
+    text-decoration: underline;
 }
