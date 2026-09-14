@@ -148,9 +148,11 @@ function loadSchedule() {
 
 
        request.send(
-    "^MINE^,$PAT_PersonId$,$VIS_EncntrId$," +
+    "^MINE^," +
+    "$PAT_PersonId$," +
+    "$VIS_EncntrId$," +
     viewMode
-        );
+     );
 
     }
     catch (error) {
