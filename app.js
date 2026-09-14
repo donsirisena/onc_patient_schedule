@@ -485,12 +485,7 @@ function createAppointmentRow(
         </td>
     `;
 
-
-    return row;
-
-}
-
-const appointmentLink =
+    const appointmentLink =
     row.querySelector(
         ".appointment-type-link"
     );
@@ -503,6 +498,12 @@ appointmentLink.addEventListener(
         );
     }
 );
+
+    return row;
+
+}
+
+
 
 function parseCernerDate(
     dateString
