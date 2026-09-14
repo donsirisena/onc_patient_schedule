@@ -148,11 +148,9 @@ function loadSchedule() {
 
 
        request.send(
-    "^MINE^," +
-    "$PAT_PersonId$," +
-    "$VIS_EncntrId$," +
-    viewMode
-     );
+            "^MINE^,$PAT_PersonId$,$VIS_EncntrId$," +
+            viewMode
+        );
 
     }
     catch (error) {
@@ -440,9 +438,16 @@ function createAppointmentRow(
         </td>
 
         <td class="appointment-type">
-            ${escapeHtml(
-                appointment.appointmentType || ""
-            )}
+        <button
+        type="button"
+        class="appointment-type-link"
+        data-sch-event-id="${appointment.scheventid}"
+        data-schedule-id="${appointment.scheduleid}"
+    >
+        ${escapeHtml(
+            appointment.appointmentType || ""
+        )}
+    </button>
         </td>
 
         <td>
@@ -485,6 +490,19 @@ function createAppointmentRow(
 
 }
 
+const appointmentLink =
+    row.querySelector(
+        ".appointment-type-link"
+    );
+
+appointmentLink.addEventListener(
+    "click",
+    function () {
+        openAppointmentHistory(
+            appointment
+        );
+    }
+);
 
 function parseCernerDate(
     dateString
@@ -796,5 +814,46 @@ function enableColumnResizing(
 
         }
     );
+
+}
+
+async function openAppointmentHistory(
+    appointment
+) {
+
+    if (
+        !appointment.scheventid ||
+        !appointment.scheduleid
+    ) {
+        console.error(
+            "Missing appointment identifiers.",
+            appointment
+        );
+
+        return;
+    }
+
+    try {
+
+        const schedulingActions =
+            await window.external
+                .DiscernObjectFactory(
+                    "PEXSCHEDULINGACTIONS"
+                );
+
+        schedulingActions.ShowHistoryView(
+            appointment.scheventid,
+            appointment.scheduleid
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "Unable to open Appointment History View:",
+            error
+        );
+
+    }
 
 }
